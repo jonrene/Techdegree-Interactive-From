@@ -19,3 +19,7 @@ document.getElementById("title").addEventListener('change', (e) => {
     }
 })
 
+// This automatically disables the t-shirt color selection element
+// when the page first loads.
+document.getElementById("color").setAttribute('disabled', true);
+
