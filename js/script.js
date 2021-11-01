@@ -55,6 +55,28 @@ design.addEventListener('change', (e) => {
                 colors[i].hidden = true;
             }
         }
-
     }
 })
+
+
+let activitiesLabels = document.getElementById('activities-box').getElementsByTagName('label'); // creates a list of references to all activity labels.
+let total_cost = 0; // used to keep track of total cost for all acitivities. 
+
+// Adds event listeners to all activity labels. Listens for clicks. (Indicates user has chosen this activity)
+for (let i=0; i < activitiesLabels.length; i++){
+    activitiesLabels[i].addEventListener('click', (e)=>{
+        e.preventDefault(); // prevents default actions of clicking on label or any elements in label
+        let checkbox = activitiesLabels[i].getElementsByTagName('input')[0]; // creates reference to input box in activity label
+        
+        // Checks if activity has been previously selected. If so, the activity will be deselected, and total cost will update. 
+        if(checkbox.checked === true){
+            checkbox.checked = false;
+            total_cost -= parseInt(checkbox.getAttribute('data-cost'));
+            document.getElementById("activities-cost").innerHTML = `Total: $${total_cost}`;
+        } else{
+            checkbox.checked = true;
+            total_cost += parseInt(checkbox.getAttribute('data-cost'));
+            document.getElementById("activities-cost").innerHTML = `Total: $${total_cost}`;
+        }
+    })
+}
