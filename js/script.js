@@ -19,8 +19,7 @@ document.getElementById("title").addEventListener('change', (e) => {
     }
 })
 
-// This automatically disables the t-shirt color selection element
-// when the page first loads.
+// This automatically disables the t-shirt color selection element when the page first loads.
 document.getElementById("color").disabled = true;
 
 // This detects for change in the design selection method
@@ -58,9 +57,11 @@ design.addEventListener('change', (e) => {
     }
 })
 
+ // creates a list of references to all activity labels.
+let activitiesLabels = document.getElementById('activities-box').getElementsByTagName('label');
 
-let activitiesLabels = document.getElementById('activities-box').getElementsByTagName('label'); // creates a list of references to all activity labels.
-let total_cost = 0; // used to keep track of total cost for all acitivities. 
+// This is used to keep track of total cost for all acitivities. 
+let total_cost = 0;
 
 // Adds event listeners to all activity labels. Listens for clicks. (Indicates user has chosen this activity)
 for (let i=0; i < activitiesLabels.length; i++){
@@ -80,3 +81,29 @@ for (let i=0; i < activitiesLabels.length; i++){
         }
     })
 }
+
+// This makes the credit card payment option the default payment option when the page first loads. 
+let payment = document.getElementById('payment');
+payment.value = "credit-card";
+
+// This hides Paypal and Bitcoin payment options when the page first loads.
+document.getElementById("paypal").style.display = 'none';
+document.getElementById("bitcoin").style.display = 'none';
+
+// This detects if the user has changed payment method and displays corresponding payment method details
+document.getElementById('payment').addEventListener('change', (e) => {
+    console.log(e.target);
+    if (e.target.value === "credit-card"){
+        document.getElementById('credit-card').style.display = 'block';
+        document.getElementById('paypal').style.display = 'none';
+        document.getElementById('bitcoin').style.display = 'none';
+    } else if (e.target.value === "paypal") {
+        document.getElementById('credit-card').style.display = 'none';
+        document.getElementById('paypal').style.display = 'block';
+        document.getElementById('bitcoin').style.display = 'none';
+    } else{
+        document.getElementById('credit-card').style.display = 'none';
+        document.getElementById('paypal').style.display = 'none';
+        document.getElementById('bitcoin').style.display = 'block';
+    }
+})
