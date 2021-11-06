@@ -23,8 +23,7 @@ document.getElementById("title").addEventListener('change', (e) => {
 document.getElementById("color").disabled = true;
 
 // This detects for change in the design selection method
-let design = document.getElementById("design");
-design.addEventListener('change', (e) => {
+document.getElementById("design").addEventListener('change', (e) => {
     // Enables t-shirt color selection method
     document.getElementById("color").disabled = false;
 
@@ -33,7 +32,7 @@ design.addEventListener('change', (e) => {
 
     // This determines which color options to be shown for t-shirt color based on design user selects. 
     // This shows color options if user selects I "heart" JS Puns
-    if (design.value === "js puns"){
+    if (document.getElementById("design").value === "js puns"){
         let colors = document.getElementById('color').children;
         for(let i=0; i < colors.length; i++){
             if (colors[i].value === "cornflowerblue" || colors[i].value === "darkslategrey" || colors[i].value === "gold"){
@@ -106,4 +105,26 @@ document.getElementById('payment').addEventListener('change', (e) => {
         document.getElementById('paypal').style.display = 'none';
         document.getElementById('bitcoin').style.display = 'block';
     }
+})
+
+// Form validation
+document.getElementsByTagName('form')[0].addEventListener('submit', (e) =>{
+    
+    // Validates name user has entered after submission
+    let userName = document.getElementById('name').value;
+    const nameRegex = /(.|\s)*\S(.|\s)*/;
+    if (nameRegex.test(userName) === false){
+        console.log("There is no name");
+        e.preventDefault();
+    }
+
+    // Validates email user has entered after submission
+    let userEmail = document.getElementById('email').value;
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailRegex.test(userEmail) === false){
+        console.log('invalid email');
+        e.preventDefault();
+    }
+
+    
 })
