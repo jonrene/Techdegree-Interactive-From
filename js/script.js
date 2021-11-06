@@ -91,7 +91,6 @@ document.getElementById("bitcoin").style.display = 'none';
 
 // This detects if the user has changed payment method and displays corresponding payment method details
 document.getElementById('payment').addEventListener('change', (e) => {
-    console.log(e.target);
     if (e.target.value === "credit-card"){
         document.getElementById('credit-card').style.display = 'block';
         document.getElementById('paypal').style.display = 'none';
@@ -106,6 +105,68 @@ document.getElementById('payment').addEventListener('change', (e) => {
         document.getElementById('bitcoin').style.display = 'block';
     }
 })
+
+
+
+// Form validation functions.
+
+// This is a function used to validate if a user has entered a valid name in the form
+// Returns true if name is valid and returns false if otherwise
+function validName(){
+    let userName = document.getElementById('name').value;
+    const nameRegex = /(.|\s)*\S(.|\s)*/;
+    if (nameRegex.test(userName) === false){
+        return false;
+    }
+    return true;
+}
+
+// This function validates if user entered a valid email in the form
+// Return true if email is valid and returns false if otherwise.
+function validEmail(){
+    let userEmail = document.getElementById('email').value;
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailRegex.test(userEmail) === false){
+        return false;
+    }
+    return true;
+}
+
+// This function validates if user has selected at least one activity.
+// Returns true if at least one actvitiy is selected and returns false if otherwise. 
+function actvitiySelected(){
+    let activities = document.getElementById('activities').getElementsByTagName('label');
+
+    for (let i=0; i < activities.length ;i++){
+        if (activities[i].firstElementChild.checked === true){
+            return true;
+        }
+    }
+    return false;
+}
+
+// This function validates given credit information information
+// Returns true if all credit card information is valid and false if otherwise. 
+function validCard(){
+    let cardRegex = /^[0-9]{13,16}$/; // Regex to validate card number
+    let zipCodeRegex = /^[0-9]{5}$/; // Regex to validate zip code
+    let cvvRegex = /^[0-9]{3}$/; // Regext to validate cvv
+    let whiteSpaceRegex = /\s{2,}/g; //Regex to rid whitespaces
+
+    if (cardRegex.test(document.getElementById('cc-num').value.replace(whiteSpaceRegex,"")) === false){
+        return false;
+    }
+
+    if (zipCodeRegex.test(document.getElementById('zip').value.replace(whiteSpaceRegex,"")) === false){
+        return false;
+    }
+
+    if (cvvRegex.test(document.getElementById('cvv').value.replace(whiteSpaceRegex,"")) === false){
+        return false;
+    }
+
+    return true;
+}
 
 // Form validation
 document.getElementsByTagName('form')[0].addEventListener('submit', (e) =>{
@@ -126,5 +187,19 @@ document.getElementsByTagName('form')[0].addEventListener('submit', (e) =>{
         e.preventDefault();
     }
 
+    // Validates user has selected at least one activity
+    if (actvitiySelected() === false){
+        console.log('you need an acivity')
+        e.preventDefault();
+    }
     
+
+    // Validates credit card information is valid if it's selected form of payment
+    if (document.getElementById('payment').value === 'credit-card'){
+        if (validCard() === false){
+            console.log("invalid card");
+            e.preventDefault();
+        }
+    }
+
 })
