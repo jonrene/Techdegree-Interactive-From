@@ -169,6 +169,7 @@ function validCard(){
 }
 
 // Form validation
+// Validates all data user entered in form
 document.getElementsByTagName('form')[0].addEventListener('submit', (e) =>{
     
     // Validates name user has entered after submission
@@ -203,3 +204,15 @@ document.getElementsByTagName('form')[0].addEventListener('submit', (e) =>{
     }
 
 })
+
+// Adds focus element to all activity checkboxs parent tag 'label'
+let activities = document.getElementById('activities').getElementsByTagName('label');
+    for (let i=0; i < activities.length ;i++){
+        activities[i].firstElementChild.addEventListener('focus', (e)=>{
+            activities[i].classList.add('focus');
+        })
+
+        activities[i].firstElementChild.addEventListener('blur', (e)=>{
+            activities[i].classList.remove('focus');
+        })
+    }
