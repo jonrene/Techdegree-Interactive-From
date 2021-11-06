@@ -154,14 +154,17 @@ function validCard(){
     let whiteSpaceRegex = /\s{2,}/g; //Regex to rid whitespaces
 
     if (cardRegex.test(document.getElementById('cc-num').value.replace(whiteSpaceRegex,"")) === false){
+        console.log('wrong card')
         return false;
     }
 
     if (zipCodeRegex.test(document.getElementById('zip').value.replace(whiteSpaceRegex,"")) === false){
+        console.log('wrong zip')
         return false;
     }
 
     if (cvvRegex.test(document.getElementById('cvv').value.replace(whiteSpaceRegex,"")) === false){
+        console.log('wrong cvv')
         return false;
     }
 
@@ -176,30 +179,38 @@ document.getElementsByTagName('form')[0].addEventListener('submit', (e) =>{
     let userName = document.getElementById('name').value;
     const nameRegex = /(.|\s)*\S(.|\s)*/;
     if (nameRegex.test(userName) === false){
-        console.log("There is no name");
+        document.getElementById('name').parentElement.classList.add('not-valid');
         e.preventDefault();
+    }else{
+        document.getElementById('name').parentElement.classList.remove('not-valid');
     }
 
     // Validates email user has entered after submission
     let userEmail = document.getElementById('email').value;
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (emailRegex.test(userEmail) === false){
-        console.log('invalid email');
+        document.getElementById('email').parentElement.classList.add('not-valid');
         e.preventDefault();
+    } else{
+        document.getElementById('email').parentElement.classList.remove('not-valid');
     }
 
     // Validates user has selected at least one activity
     if (actvitiySelected() === false){
-        console.log('you need an acivity')
+        document.getElementById('activities').classList.add('not-valid');
         e.preventDefault();
+    }else{
+        document.getElementById('activities').classList.remove('not-valid')
     }
     
 
     // Validates credit card information is valid if it's selected form of payment
     if (document.getElementById('payment').value === 'credit-card'){
         if (validCard() === false){
-            console.log("invalid card");
+            document.getElementById('credit-card').parentElement.classList.add('not-valid');
             e.preventDefault();
+        } else{
+            document.getElementById('credit-card').parentElement.classList.remove('not-valid');
         }
     }
 
