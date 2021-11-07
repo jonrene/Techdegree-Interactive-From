@@ -1,7 +1,7 @@
 // Jonathan Rene
 // Techdegree - Project 3
 // Javascript Code
-// 10/31/2021
+// 11/06/2021
 
 // This automatically focuses on the name field when the page first loads. 
 document.getElementById("name").focus();
@@ -82,8 +82,7 @@ for (let i=0; i < activitiesLabels.length; i++){
 }
 
 // This makes the credit card payment option the default payment option when the page first loads. 
-let payment = document.getElementById('payment');
-payment.value = "credit-card";
+document.getElementById('payment').value = 'credit-card';
 
 // This hides Paypal and Bitcoin payment options when the page first loads.
 document.getElementById("paypal").style.display = 'none';
@@ -105,8 +104,6 @@ document.getElementById('payment').addEventListener('change', (e) => {
         document.getElementById('bitcoin').style.display = 'block';
     }
 })
-
-
 
 // Form validation functions.
 
@@ -145,29 +142,33 @@ function actvitiySelected(){
     return false;
 }
 
-// This function validates given credit information information
-// Returns true if all credit card information is valid and false if otherwise. 
-function validCard(){
+// This function validates credit card number.
+// Returns true if card number is valid and false if otherwise. 
+function validCardNumber(){
     let cardRegex = /^[0-9]{13,16}$/; // Regex to validate card number
-    let zipCodeRegex = /^[0-9]{5}$/; // Regex to validate zip code
+    if (cardRegex.test(document.getElementById('cc-num').value.replace(/\s*$/,"")) === false){
+        return false;
+    }
+    return true;
+}
+
+// This function validates zip code.
+// Returns true if zip code is valid and false if otherwise. 
+function validZip(){
+    let zipCodeRegex = /^[0-9]{5}(?:-[0-9]{4})?$/; // Regex to validate zip code
+    if (zipCodeRegex.test(document.getElementById('zip').value.replace(/\s*$/,"")) === false){
+        return false;
+    }
+    return true;
+}
+
+// This function validates CVV card number.
+// Returns true if CVV number is valid and false if otherwise. 
+function validCVV(){
     let cvvRegex = /^[0-9]{3}$/; // Regext to validate cvv
-    let whiteSpaceRegex = /\s{2,}/g; //Regex to rid whitespaces
-
-    if (cardRegex.test(document.getElementById('cc-num').value.replace(whiteSpaceRegex,"")) === false){
-        console.log('wrong card')
+    if (cvvRegex.test(document.getElementById('cvv').value.replace(/\s*$/,"")) === false){
         return false;
     }
-
-    if (zipCodeRegex.test(document.getElementById('zip').value.replace(whiteSpaceRegex,"")) === false){
-        console.log('wrong zip')
-        return false;
-    }
-
-    if (cvvRegex.test(document.getElementById('cvv').value.replace(whiteSpaceRegex,"")) === false){
-        console.log('wrong cvv')
-        return false;
-    }
-
     return true;
 }
 
@@ -180,9 +181,13 @@ document.getElementsByTagName('form')[0].addEventListener('submit', (e) =>{
     const nameRegex = /(.|\s)*\S(.|\s)*/;
     if (nameRegex.test(userName) === false){
         document.getElementById('name').parentElement.classList.add('not-valid');
+        document.getElementById('name').parentElement.classList.remove('valid');
+        document.getElementById('name-hint').style.display = 'block';
         e.preventDefault();
     }else{
         document.getElementById('name').parentElement.classList.remove('not-valid');
+        document.getElementById('name').parentElement.classList.add('valid');
+        document.getElementById('name-hint').style.display = 'none';
     }
 
     // Validates email user has entered after submission
@@ -190,39 +195,71 @@ document.getElementsByTagName('form')[0].addEventListener('submit', (e) =>{
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (emailRegex.test(userEmail) === false){
         document.getElementById('email').parentElement.classList.add('not-valid');
+        document.getElementById('email').parentElement.classList.remove('valid');
+        document.getElementById('email-hint').style.display = 'block';
         e.preventDefault();
     } else{
         document.getElementById('email').parentElement.classList.remove('not-valid');
+        document.getElementById('email').parentElement.classList.add('valid');
+        document.getElementById('email-hint').style.display = 'none';
     }
 
     // Validates user has selected at least one activity
     if (actvitiySelected() === false){
         document.getElementById('activities').classList.add('not-valid');
+        document.getElementById('activities').classList.remove('valid');
+        document.getElementById('activities-hint').style.display = 'block';
         e.preventDefault();
     }else{
-        document.getElementById('activities').classList.remove('not-valid')
+        document.getElementById('activities').classList.remove('not-valid');
+        document.getElementById('activities').classList.add('valid');
+        document.getElementById('activities-hint').style.display = 'none';
     }
     
-
     // Validates credit card information is valid if it's selected form of payment
     if (document.getElementById('payment').value === 'credit-card'){
-        if (validCard() === false){
+        // Validates credit card number
+        if (validCVV() === false || validCardNumber() === false || validZip() === false){
             document.getElementById('credit-card').parentElement.classList.add('not-valid');
+            document.getElementById('credit-card').parentElement.classList.remove('valid');
+
+            if (validCardNumber() === false){
+                document.getElementById('cc-hint').style.display = 'block';
+            }else{
+                document.getElementById('cc-hint').style.display = 'none';
+            }
+
+            if (validZip() === false){
+                document.getElementById('zip-hint').style.display = 'block';
+            }else{
+                document.getElementById('zip-hint').style.display = 'none';
+            }
+
+            if (validCVV() === false){
+                document.getElementById('cvv-hint').style.display = 'block';
+            }else{
+                document.getElementById('cvv-hint').style.display = 'none';
+            }
+
             e.preventDefault();
         } else{
+            document.getElementById('cc-hint').style.display = 'none';
+            document.getElementById('zip-hint').style.display = 'none';
+            document.getElementById('cvv-hint').style.display = 'none';
             document.getElementById('credit-card').parentElement.classList.remove('not-valid');
+            document.getElementById('credit-card').parentElement.classList.add('valid');
         }
     }
 
 })
 
 // Adds focus element to all activity checkboxs parent tag 'label'
+// for user accessibility. 
 let activities = document.getElementById('activities').getElementsByTagName('label');
     for (let i=0; i < activities.length ;i++){
         activities[i].firstElementChild.addEventListener('focus', (e)=>{
             activities[i].classList.add('focus');
         })
-
         activities[i].firstElementChild.addEventListener('blur', (e)=>{
             activities[i].classList.remove('focus');
         })
